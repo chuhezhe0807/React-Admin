@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="big-bg" id="bg">
+        <div id="role">
+            <img src="" alt="" width="40" id="arrow">
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    let unit = 40; // 一个单位的长度,就是一个网格的宽高
+    let coordList = [];  // 路径点集合
+    let originNode = {};  // 起点
+    let targetNode = {};  // 终点
+    let obstacle = [
+        {x: 12,y:12},
+        {x: 12,y:12},
+        {x: 12,y:12},
+    ];
+    let targetCell = null;
+    let timer = null;
+
+    var bg = document.getElementById("bg")
+    for (let index = 0; index < 2000; index++) {
+        var cell = document.createElement("div");
+        cell.classList.add("cell")
+        bg.appendChild(cell)
+    }
+
+    // 获取起点
+    let startCell = document.getElementById("role");
+
+    // 点击的点定为终点
+    document.addEventListener("mousedown", (e) => {
+        let { x: x1, y: y1 } = startCell.getBoundingClientRect();
+        originNode = {
+            x: x1 / unit,
+            y: y1 / unit,
+        }
+
+        let { x: x2, y: y2 } = e.target.getBoundingClientRect();
+        targetNode = {
+            x: x2 / unit,
+            y: y2 / unit,
+        }
+        targetCell = e.target;
+        targetCell.style.backgroundColor = "#fff566"
+        pushNearNode()
+    })
+
+    function getNearNodes(originNode) {
+        let leftNode = {
+            name: "left",
+            x: originNode.x - 1,
+            y: originNode.y,
+            g: 1,  // 附近点的距离，水平垂直边是定义为1个单位，斜边定义为1.4个的单位（暂时不考虑斜边）
+            h: 0,  // 这点距离终点的水平距离x个单位 与 这点距离终点的垂直距离x个单位 之和
+            f: 0,  // g 与 h 之和
+        };
+        setDistProp(leftNode);
+
+        let topNode = {
+            name: "top",
+            x: originNode.x,
+            y: originNode.y - 1,
+            g: 1,
+            h: 0,
+            f: 0,
+        };
+        setDistProp(topNode);
+
+        let rightNode = {
+            name: "right",
+            x: originNode.x + 1,
+            y: originNode.y,
+            g: 1,
+            h: 0,
+            f: 0,
+        };
+        setDistProp(rightNode);
+
+        let bottomNode = {
+            name: "bottom",
+            x: originNode.x,
+            y: originNode.y + 1,
+            g: 1,
+            h: 0,
+            f: 0,
+        };
+        setDistProp(bottomNode);
+        return [leftNode, topNode, rightNode, bottomNode,]
+    }
+
+    function setDistProp(node) {
+        if (!node.g) {
+            node.g = 0;
+        }
+        node.h = Math.abs(targetNode.x - node.x) + Math.abs(targetNode.y - node.y);
+        node.f = node.g + node.h;
+    }
+
+    // 递归找离目标点最近的点,push到数组当中
+    function pushNearNode() {
+        let nearNodeArr = getNearNodes(originNode);
+        let minFNode = null;   // 离目标最近的点
+        for (let index = 0; index < nearNodeArr.length; index++) {
+            const node = nearNodeArr[index];
+            if (!minFNode) {
+                minFNode = node;
+            } else if (node.f <= minFNode.f) {
+                minFNode = node;
+            }
+        }
+        if (minFNode) {
+            coordList.push(minFNode);
+            originNode = minFNode;
+
+            if (minFNode.x == targetNode.x && minFNode.y == targetNode.y) {  // 到达终点
+                coordList.push(targetNode);
+                let step = 0;
+                timer = setInterval(() => {
+                    if (coordList[step]) {
+                        startCell.style.left = coordList[step].x * unit + "px";
+                        startCell.style.top = coordList[step].y * unit + "px";
+                        switch (coordList[step].name) {
+                            case "bottom":
+                                startCell.style.transform = "rotate(0)"
+                                break;
+                            case "right":
+                                startCell.style.transform = "rotate(-90deg)"
+                                break;
+                            case "left":
+                                startCell.style.transform = "rotate(90deg)"
+                                break;
+                            case "top":
+                                startCell.style.transform = "rotate(-180deg)"
+                                break;
+                            default:
+                                break;
+                        }
+                        // console.log(coordList[step], "coordList[step]");
+                        step++;
+                    } else {
+                        targetCell.style.backgroundColor = "transparent";
+                        coordList = []
+                        clearInterval(timer);
+                    }
+                }, 200)
+            } else {
+                pushNearNode();
+            }
+        }
+    }
+
+</script>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    #role {
+        width: 40px;
+        height: 40px;
+        left: 680px;
+        top: 80px;
+        position: fixed;
+        background: linear-gradient(to bottom, #bae0ff, #1677ff);
+        transition: .3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .big-bg {
+        width: 100vw;
+        height: 100vh;
+        background: #152439;
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+    }
+
+    .cell {
+        width: 40px;
+        height: 40px;
+        border-bottom: 1px solid rgba(33, 233, 252, 0.12);
+        border-right: 1px solid rgba(33, 233, 252, 0.12);
+    }
+
+    .cell:hover {
+        background-color: rgba(33, 233, 252, 0.22);
+    }
+
+    .obstacle {
+        background-color: #f5222d;
+        color: #fff;
+        font-size: 14px;
+        line-height: 19px;
+        text-align: center;
+    }
+</style>

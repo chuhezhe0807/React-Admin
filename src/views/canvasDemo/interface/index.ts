@@ -13,6 +13,9 @@ interface BlockInfo {
   width: number;
   height: number;
   fillColor: string;
+  scale: number;
+  relative2originX: number;
+  relative2originY: number;
 }
 
 // 存储canvas对象的接口

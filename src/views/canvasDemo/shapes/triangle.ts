@@ -12,11 +12,22 @@ class Triangle extends Block {
       width: this.width,
       height: this.height,
       fillColor: this.fillColor,
+      scale: this.scale,
+      relative2originX: this.relative2originX,
+      relative2originY: this.relative2originY,
     }
   }
 
-  constructor(ctx: CanvasRenderingContext2D, x: number, y: number, width: number = 100, height: number = 100, fillColor: string = '#4472c4') {
-    super(x, y, width, height, ctx)
+  // 在缩放比例 scale 为1的时候默认的宽高为100 
+  constructor(ctx: CanvasRenderingContext2D, x: number, y: number, relative2originX: number, relative2originY: number, width: number = 100, height: number = 100, fillColor: string = '#4472c4', scale: number) {
+    // console.log(scale, width, height);
+    
+    if (scale) {
+      super(x, y, relative2originX, relative2originY, width * scale, height * scale, ctx, scale)
+    } else {
+      super(x, y, relative2originX, relative2originY, width, height, ctx, scale)
+    }
+    
     this.name = 'triangle'
     this.class = 'Triangle'
     this.zIndex = 1
