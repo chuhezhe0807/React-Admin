@@ -16,7 +16,8 @@ class Circle extends Block {
             scale: this.scale,
             relative2originX: this.relative2originX,
             relative2originY: this.relative2originY,
-            id: this.id
+            id: this.id,
+            rotateDeg: this.rotateDeg
         }
     }
 
@@ -25,7 +26,18 @@ class Circle extends Block {
     prevCoordinate: IPoint[]; // 最近一次绘制的三个控制点的坐标
 
     // 在缩放比例 scale 为1的时候默认的宽高为100 
-    constructor(ctx: CanvasRenderingContext2D, x: number, y: number, relative2originX: number, relative2originY: number, width: number = 100, height: number = 100, fillColor: string = '#4472c4', scale: number) {
+    constructor(
+        ctx: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        relative2originX: number,
+        relative2originY: number,
+        width: number = 100,
+        height: number = 100,
+        fillColor: string = '#4472c4',
+        scale: number,
+        rotateDeg: number = 0
+    ) {
         // console.log(scale, width, height);
 
         if (scale) {
@@ -39,7 +51,8 @@ class Circle extends Block {
         this.zIndex = 1
         this.fillColor = fillColor
         this.type = "CIRCLE"
-        this.prevCoordinate = []
+        this.prevCoordinate = [];
+        this.rotateDeg = rotateDeg
     }
 
     draw() {
@@ -52,6 +65,7 @@ class Circle extends Block {
         ctx.arc(x + width / 2, y + width / 2, width / 2, 0, Math.PI * 2);
         ctx.stroke();
         ctx.fillStyle = this.fillColor; // 先选择颜色
+        ctx.globalAlpha = this.isDragged ? 0.5 : 1; // 拖拽时半透明
         ctx.fill(); // 再填充
         ctx.restore(); // 通过在绘图状态栈中弹出顶端的状态(需要调用 save() 方法)，将 canvas 恢复到最近的保存状态的方法。
         // this.setFocusStyle();

@@ -431,7 +431,7 @@ class Block extends Node {
      * 
     */
     setRotateDeg() {
-        console.log('setRotateDeg', this.rotateDeg);
+        // console.log('setRotateDeg', this.rotateDeg);
 
 
         const _x = this.x;

@@ -129,13 +129,13 @@ const CanvasDemo = () => {
             myCanvasRef.current!.addEventListener("mousedown", mousedown)
             myCanvasRef.current!.addEventListener("mousemove", mousemove)
             return () => {
-                myCanvasRef.current!.removeEventListener("wheel", mousewheel)
-                myCanvasRef.current!.removeEventListener("mousedown", mousedown)
-                myCanvasRef.current!.removeEventListener("mousemove", mousemove)
+                myCanvasRef.current?.removeEventListener("wheel", mousewheel)
+                myCanvasRef.current?.removeEventListener("mousedown", mousedown)
+                myCanvasRef.current?.removeEventListener("mousemove", mousemove)
             }
         } else {
             myCanvasRef.current!.addEventListener("click", plumCanvasClick)
-            return () => myCanvasRef.current!.removeEventListener("click", plumCanvasClick)
+            return () => myCanvasRef.current?.removeEventListener("click", plumCanvasClick)
         }
     }, [scale, pageSlicePos, plum])
 
@@ -143,7 +143,7 @@ const CanvasDemo = () => {
     useEffect(() => {
         if (automaticRoute) {
             myCanvasRef.current!.addEventListener("click", startPointClick)
-            return () => myCanvasRef.current!.removeEventListener("click", startPointClick)
+            return () => myCanvasRef.current?.removeEventListener("click", startPointClick)
         }
     }, [automaticRoute, rightAngle])
 
@@ -168,6 +168,10 @@ const CanvasDemo = () => {
      * @param scaleVal 缩放倍数
      */
     const drawLineGrid = (scaleVal = scale) => {
+        /*获取绘图工具*/
+        var ctx = ctxVal || myCanvasRef.current!.getContext("2d")
+
+        if (plum) return ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
         // console.log("x, y", x, y);
         // console.log("draw")
 
@@ -280,8 +284,14 @@ const CanvasDemo = () => {
                     item.width || undefined,
                     item.height || undefined,
                     item.fillColor || undefined,
-                    scale
+                    scale,
+                    item?.rotateDeg || 0
                 )
+                if (item.isDragged) {
+                    temp.isDragged = true
+                } else {
+                    temp.isDragged = false
+                }
                 // console.log("temp", temp);
                 temp.draw()
                 // console.log(temp)
@@ -301,8 +311,15 @@ const CanvasDemo = () => {
                     item.width || undefined,
                     item.height || undefined,
                     item.fillColor || undefined,
-                    scale
+                    scale,
+                    item?.rotateDeg || 0
                 )
+                if (item.isDragged) {
+                    temp.isDragged = true
+                } else {
+                    temp.isDragged = false
+                }
+
                 // console.log("temp", temp);
                 temp.draw()
                 // console.log(temp)
@@ -513,7 +530,7 @@ const CanvasDemo = () => {
      * @param {Event} e
      */
     const controlPointClick = (e: any) => {
-        console.log(e, CurrentControlPointRef.current.position)
+        // console.log(e, CurrentControlPointRef.current.position)
 
         const currentSelectedEle = canvasObjRef.current.objects.find((item) => item.isSelected)
         // const _x = e.offsetX;
@@ -530,11 +547,11 @@ const CanvasDemo = () => {
         drawLineGrid()
 
         document.onmousemove = (e: any) => {
-            console.log("move", e)
+            // console.log("move", e)
         }
 
         document.onmouseup = (e: any) => {
-            console.log("up", e)
+            // console.log("up", e)
 
             document.onmousemove = null
             document.onmouseup = null
@@ -572,6 +589,7 @@ const CanvasDemo = () => {
             canvasObjRef.current.objects.splice(index, 1)
             drawLineGrid()
 
+            message.success("删除了一个元素。")
             myCanvasRef.current!.style.cursor = "auto"
             document.removeEventListener(MyEvent.DB_CLICK, dbClick)
             hoveredElementRef.current!.element = null
@@ -1071,17 +1089,17 @@ const CanvasDemo = () => {
                     生长梅花
                 </Button>
                 {plum ? <Button onClick={clearPlumBlossom}>清空</Button> : null}
-                <Dropdown.Button menu={{ items: drawItems }} icon={<DownOutlined />}>
+                <Dropdown.Button disabled={plum} menu={{ items: drawItems }} icon={<DownOutlined />}>
                     选择图形
                 </Dropdown.Button>
                 <Button disabled={plum} onClick={printObjs}>
                     打印对象
                 </Button>
-                <Button type={automaticRoute ? "primary" : "default"} onClick={automaticRouting}>
+                <Button disabled={plum} type={automaticRoute ? "primary" : "default"} onClick={automaticRouting}>
                     自动寻路
                 </Button>
                 {automaticRoute && (
-                    <Button type={rightAngle ? "primary" : "default"} onClick={(val) => setRightAngle(!val)}>
+                    <Button disabled={plum} type={rightAngle ? "primary" : "default"} onClick={(val) => setRightAngle(!val)}>
                         RightAngle
                     </Button>
                 )}
