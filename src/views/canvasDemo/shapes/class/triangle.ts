@@ -79,15 +79,15 @@ class Triangle extends Block {
 
         const { leftBottom, rightBottom } = this.getCoordinate()
         ctx.beginPath();
-        ctx.moveTo(x + width / 2, y);
-        ctx.lineTo(leftBottom.x, leftBottom.y);
-        ctx.lineTo(rightBottom.x, rightBottom.y);
+        // ctx.moveTo(x + width / 2, y);
+        // ctx.lineTo(leftBottom.x, leftBottom.y);
+        // ctx.lineTo(rightBottom.x, rightBottom.y);
         ctx.closePath(); // 闭合
         ctx.fillStyle = this.fillColor; // 先选择颜色
         ctx.globalAlpha = this.isDragged ? 0.5 : 1; // 拖拽时半透明
         ctx.fill(); // 再填充
         ctx.restore(); // 通过在绘图状态栈中弹出顶端的状态(需要调用 save() 方法)，将 canvas 恢复到最近的保存状态的方法。
-        this.setRotateDeg()
+        this.setRotateDeg();
         // this.setFocusStyle();
         // this.setControPoint(); TODO
         // this.update(); TODO

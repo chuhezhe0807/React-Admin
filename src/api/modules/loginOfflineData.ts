@@ -216,28 +216,28 @@ export const menuList: Menu.MenuOptions[] = [
         children: [
             {
                 icon: "AppstoreOutlined",
-                title: "Gitee 仓库",
-                path: "/link/gitee",
-                isLink: "https://gitee.com/laramie/Hooks-Admin"
-            },
-            {
-                icon: "AppstoreOutlined",
                 title: "GitHub 仓库",
-                path: "/link/github",
-                isLink: "https://github.com/HalseySpicy/Hooks-Admin"
+                path: "/link/gitee",
+                isLink: "https://github.com/chuhezhe0807"
             },
-            {
-                icon: "AppstoreOutlined",
-                title: "掘金文档",
-                path: "/link/juejin",
-                isLink: "https://juejin.cn/user/3263814531551816/posts"
-            },
-            {
-                icon: "AppstoreOutlined",
-                title: "个人博客",
-                path: "/link/myBlog",
-                isLink: "http://www.spicyboy.cn"
-            }
+            // {
+            //     icon: "AppstoreOutlined",
+            //     title: "GitHub 仓库",
+            //     path: "/link/github",
+            //     isLink: "https://github.com/HalseySpicy/Hooks-Admin"
+            // },
+            // {
+            //     icon: "AppstoreOutlined",
+            //     title: "掘金文档",
+            //     path: "/link/juejin",
+            //     isLink: "https://juejin.cn/user/3263814531551816/posts"
+            // },
+            // {
+            //     icon: "AppstoreOutlined",
+            //     title: "个人博客",
+            //     path: "/link/myBlog",
+            //     isLink: "http://www.spicyboy.cn"
+            // }
         ]
     }
 ]

@@ -98,6 +98,12 @@ const isPointInElement = (point: IPoint, pointArr: IPoint[]): boolean => {
     return false;
 }
 
+/**
+ * @description 返回旋转 deg 角度后对应形状绘制需要的点的坐标
+ * @param {number} deg 旋转的角度（顺时针为正方向）
+*/
+// getCoor
+
 export {
     runAnimate,
     getUuid,
