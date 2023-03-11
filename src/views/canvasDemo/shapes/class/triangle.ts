@@ -87,7 +87,7 @@ class Triangle extends Block {
         ctx.globalAlpha = this.isDragged ? 0.5 : 1; // 拖拽时半透明
         ctx.fill(); // 再填充
         ctx.restore(); // 通过在绘图状态栈中弹出顶端的状态(需要调用 save() 方法)，将 canvas 恢复到最近的保存状态的方法。
-        this.setRotateDeg()
+        this.setRotateDeg();
         // this.setFocusStyle();
         // this.setControPoint(); TODO
         // this.update(); TODO
