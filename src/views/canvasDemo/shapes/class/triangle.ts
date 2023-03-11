@@ -79,9 +79,9 @@ class Triangle extends Block {
 
         const { leftBottom, rightBottom } = this.getCoordinate()
         ctx.beginPath();
-        ctx.moveTo(x + width / 2, y);
-        ctx.lineTo(leftBottom.x, leftBottom.y);
-        ctx.lineTo(rightBottom.x, rightBottom.y);
+        // ctx.moveTo(x + width / 2, y);
+        // ctx.lineTo(leftBottom.x, leftBottom.y);
+        // ctx.lineTo(rightBottom.x, rightBottom.y);
         ctx.closePath(); // 闭合
         ctx.fillStyle = this.fillColor; // 先选择颜色
         ctx.globalAlpha = this.isDragged ? 0.5 : 1; // 拖拽时半透明

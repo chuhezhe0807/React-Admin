@@ -100,6 +100,27 @@ class Block extends Node {
     }
 
     /**
+     * @description 返回旋转 deg 角度后对应形状绘制需要的点的坐标
+     * @param {IPoint} point 需要转换的点的坐标
+    */
+    getCoordinateAfterRotate(point: IPoint): IPoint {
+        const { x, y } = point;
+        // O(0，0)点到M(x，y)点与x轴正方向的夹角
+        const a = Math.atan2(y, x);
+        // OM长度
+        const om = Math.sqrt(x ** 2 + y ** 2);
+        // 旋转deg角度后的x坐标
+        const _x = om * Math.cos(a + this.rotateDeg);
+        // 旋转deg角度后的y坐标
+        const _y = om * Math.sin(a + this.rotateDeg);
+
+        return {
+            x: _x,
+            y: _y
+        }
+    }
+
+    /**
      * @description 根据起始点和宽高返回左上、右上、右下和左下四个点的相对于canvas左上角的坐标
      * @returns IPoint[]
      */
@@ -121,7 +142,40 @@ class Block extends Node {
             y: this.y + this.height,
         };
 
-        return { leftTop, rightTop, rightBottom, leftBottom };
+        if (this.rotateDeg !== 0) {
+            return {
+                leftTop: this.getCoordinateAfterRotate(leftTop),
+                rightTop: this.getCoordinateAfterRotate(rightTop),
+                rightBottom: this.getCoordinateAfterRotate(rightBottom),
+                leftBottom: this.getCoordinateAfterRotate(leftBottom)
+            };
+        } else {
+            return { leftTop, rightTop, rightBottom, leftBottom };
+        }
+    }
+
+    /**
+     * @description 返回旋转 deg 角度后对应形状绘制需要的点的坐标
+     * @param {number} deg 旋转的角度（顺时针为正方向）
+    */
+    retCoordinateAfterRotate(deg: number): IPoint {
+        let x = this.x;
+        let y = this.y;
+
+        // //如果没有旋转，那么只计算偏移量就行，不用考虑角度
+        // if (this.rotateDeg != 0) {
+        switch (this.class.toUpperCase()) {
+            case "TRIANGLE":
+                // 
+                break;
+            // case "TRIANGLE":
+            //     break;
+            // case "TRIANGLE":
+            //     break;
+        }
+        // }
+
+        return { x, y }
     }
 
     /**
