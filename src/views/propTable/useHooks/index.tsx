@@ -1,12 +1,20 @@
 import { useEffect } from "react"
 import { Table, DatePicker, Button, Space } from "antd"
+
+import dayjs from "dayjs";
+import 'dayjs/locale/zh-cn';
+
+dayjs.locale("zh-cn");
+
 import useAuthButtons from "@/hooks/useAuthButtons"
 import "./index.less"
+
+const dateFormat = "YYYY-MM-DD";
 
 const UseHooks = () => {
   // 按钮权限
   const { BUTTONS } = useAuthButtons()
-  const { RangePicker } = DatePicker
+  // const { RangePicker } = DatePicker
 
   const dataSource = [
     {
@@ -67,7 +75,7 @@ const UseHooks = () => {
     <div className="card content-box">
       <div className="date">
         <span>切换国际化的时候看我 😎 ：</span>
-        <RangePicker />
+        <DatePicker defaultValue={dayjs("2023-10-13", dateFormat)} />
       </div>
       <div className="auth">
         <Space>
