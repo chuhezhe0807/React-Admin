@@ -1,12 +1,16 @@
+import * as AllTypes from "@/redux/mutation-types";
+import type {RootDispatch, RootState} from "@/redux/index";
+
 import { Dropdown } from "antd"
-import { connect } from "react-redux"
-import { setAssemblySize } from "@/redux/modules/global/action"
+import { useSelector, useDispatch } from "react-redux"
+import type { SizeType } from "antd/lib/config-provider/SizeContext";
 
 const AssemblySize = (props: any) => {
-  const { setAssemblySize, assemblySize } = props
+  const dispatch = useDispatch<RootDispatch>();
+  const { assemblySize } = useSelector((state: RootState) => state.global)
 
   const onClick = (e: MenuInfo) => {
-    setAssemblySize(e.key)
+    dispatch({type: AllTypes.SET_ASSEMBLY_SIZE, assemblySize: e.key as SizeType});
   }
 
   const items = [
@@ -37,6 +41,4 @@ const AssemblySize = (props: any) => {
   )
 }
 
-const mapStateToProps = (state: any) => state.global
-const mapDispatchToProps = { setAssemblySize }
-export default connect(mapStateToProps, mapDispatchToProps)(AssemblySize)
+export default AssemblySize;

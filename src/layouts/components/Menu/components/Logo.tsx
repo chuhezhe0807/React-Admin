@@ -1,16 +1,17 @@
-import { connect } from "react-redux"
 import logo from "@/assets/images/logo.png"
+import type {RootState} from "@/redux/index";
 
-const Logo = (props: any) => {
-  const { isCollapse } = props
+import { useSelector } from "react-redux"
+
+const Logo = () => {
+  const { isCollapse } = useSelector((state: RootState) => state.menu);
 
   return (
     <div className="logo-box">
       <img src={logo} alt="logo" className="logo-img" />
-      {!isCollapse ? <h2 className="logo-text">Create Admin</h2> : null}
+      {!isCollapse ? <h2 className="logo-text">React-Admin</h2> : null}
     </div>
   )
 }
 
-const mapStateToProps = (state: any) => state.menu
-export default connect(mapStateToProps, null)(Logo)
+export default Logo;

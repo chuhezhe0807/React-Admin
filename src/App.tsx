@@ -1,43 +1,42 @@
-import { useState, useEffect } from "react"
-import { getBrowserLang } from "./utils/utils"
-import { ConfigProvider } from "antd"
-import { connect } from "react-redux"
-import { setLanguage } from "@/redux/modules/global/action"
-import { HashRouter } from "react-router-dom"
 import AuthRouter from "@/routes/utils/authRouter"
 import Router from "@/routes/index"
 import useTheme from "@/hooks/useTheme"
+import {LANGUAGE_ENUM as TLocaleType} from "@/enum/ReduxEnum"
+import type {RootState} from "@/redux/index";
+
+import i18n from "i18next"
 import zhCN from "antd/lib/locale/zh_CN"
 import enUS from "antd/lib/locale/en_US"
-import i18n from "i18next"
-import "moment/dist/locale/zh-cn"
+import zhTW from "antd/lib/locale/zh_TW"
+import jaJP from "antd/lib/locale/ja_JP"
+import { useEffect } from "react"
+import { getBrowserLang } from "./utils/utils"
+import { ConfigProvider } from "antd"
+import { useSelector } from "react-redux"
+import { HashRouter } from "react-router-dom"
+import type { Locale } from "antd/lib/locale"
 
-const App = (props: any) => {
-  const { language, assemblySize, themeConfig, setLanguage } = props
-  const [i18nLocale, setI18nLocale] = useState(zhCN)
+const LOCALE_MAP: {[key in TLocaleType]: Locale} = {
+  zhCN,
+  enUS,
+  zhTW,
+  jaJP
+}
+
+const App = () => {
+  const { language, assemblySize, themeConfig } = useSelector((state: RootState) => state.global);
 
   // 使用全局主题
-  useTheme(themeConfig)
-
-  // 设置 antd 语言国际化
-  const setAntdLanguage = () => {
-    // 如果 redux 中有默认语言就设置成 redux 的默认语言，没有默认语言就设置成浏览器默认语言
-    if (language && language == "zh") return setI18nLocale(zhCN)
-    if (language && language == "en") return setI18nLocale(enUS)
-    if (getBrowserLang() == "zh") return setI18nLocale(zhCN)
-    if (getBrowserLang() == "en") return setI18nLocale(enUS)
-  }
+  useTheme(themeConfig);
 
   useEffect(() => {
     // 全局使用国际化
     i18n.changeLanguage(language || getBrowserLang())
-    setLanguage(language || getBrowserLang())
-    setAntdLanguage()
-  }, [language])
+  }, [language]);
 
   return (
     <HashRouter>
-      <ConfigProvider locale={i18nLocale} componentSize={assemblySize}>
+      <ConfigProvider locale={LOCALE_MAP[language as TLocaleType]} componentSize={assemblySize}>
         <AuthRouter>
           <Router></Router>
         </AuthRouter>
@@ -46,6 +45,4 @@ const App = (props: any) => {
   )
 }
 
-const mapStateToProps = (state: any) => state.global
-const mapDispatchToProps = { setLanguage }
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default App;

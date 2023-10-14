@@ -12,7 +12,6 @@ const lazyLoad = (Comp: React.LazyExoticComponent<any>): React.ReactNode => {
       fallback={
         <Spin
           size="large"
-          tip="Loading"
           style={{
             display: "flex",
             alignItems: "center",

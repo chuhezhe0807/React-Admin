@@ -1,17 +1,42 @@
-import { useEffect } from "react"
-import { Table, DatePicker, Button, Space } from "antd"
-
-import dayjs from "dayjs";
-import 'dayjs/locale/zh-cn';
-
-dayjs.locale("zh-cn");
-
+import type {RootState} from "@/redux/index";
 import useAuthButtons from "@/hooks/useAuthButtons"
+import {LOCALE_STR_ENUM} from "@/enum/ReduxEnum"
+
+import {useSelector} from "react-redux";
+import { Table, DatePicker, Button, Space } from "antd";
+import dayjs from "dayjs";
+
+import 'dayjs/locale/zh-cn';
+import 'dayjs/locale/zh-tw';
+import 'dayjs/locale/ja';
+import 'dayjs/locale/en';
 import "./index.less"
 
 const dateFormat = "YYYY-MM-DD";
 
 const UseHooks = () => {
+  const {language} = useSelector((state: RootState) => state.global);
+
+  (function() {
+    switch(language) {
+      case LOCALE_STR_ENUM.zhCN:
+        dayjs.locale("zh-cn");
+        break;
+      case LOCALE_STR_ENUM.zhTW:
+        dayjs.locale("zh-tw");
+        break;
+      case LOCALE_STR_ENUM.enUS:
+        dayjs.locale("en");
+        break;
+      case LOCALE_STR_ENUM.jaJP:
+        dayjs.locale("ja");
+        break;
+      default:
+        dayjs.locale("zh-cn");
+        break;
+    }
+  })();
+
   // 按钮权限
   const { BUTTONS } = useAuthButtons()
   // const { RangePicker } = DatePicker

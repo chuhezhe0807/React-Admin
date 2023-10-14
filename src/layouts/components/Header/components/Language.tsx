@@ -1,22 +1,39 @@
-import { Dropdown } from "antd"
-import { connect } from "react-redux"
-import { setLanguage } from "@/redux/modules/global/action"
+import * as AllTypes from "@/redux/mutation-types";
+import type {RootState, RootDispatch} from "@/redux/index";
 
-const Language = (props: any) => {
-  const { setLanguage, language } = props
+import { Dropdown } from "antd";
+import {useSelector, useDispatch} from "react-redux";
+
+const Language = () => {
+  const dispatch = useDispatch<RootDispatch>();
+  const { language } = useSelector((state: RootState) => state.global);
+
+  const setLanguage = (language: string) => dispatch({type: AllTypes.SET_LANGUAGE, language});
 
   const items = [
     {
       key: "1",
       label: <span>简体中文</span>,
-      onClick: () => setLanguage("zh"),
-      disabled: language === "zh",
+      onClick: () => setLanguage("zhCN"),
+      disabled: language === "zhCN",
     },
     {
       key: "2",
       label: <span>English</span>,
-      onClick: () => setLanguage("en"),
-      disabled: language === "en",
+      onClick: () => setLanguage("enUS"),
+      disabled: language === "enUS",
+    },
+    {
+      key: "3",
+      label: <span>繁體中文</span>,
+      onClick: () => setLanguage("zhTW"),
+      disabled: language === "zhTW",
+    },
+    {
+      key: "4",
+      label: <span>日本語</span>,
+      onClick: () => setLanguage("jaJP"),
+      disabled: language === "jaJP",
     },
   ]
 
@@ -27,6 +44,19 @@ const Language = (props: any) => {
   )
 }
 
-const mapStateToProps = (state: any) => state.global
-const mapDispatchToProps = { setLanguage }
-export default connect(mapStateToProps, mapDispatchToProps)(Language)
+export default Language;
+
+/** 
+ * mapStateToProps 和 mapDispatchToProps示例
+ */
+// const mapStateToProps = (state: any) => state.global
+// mapDispatchToProps 函数形式
+// const mapDispatchToProps = (dispatch, ownProps) => {
+//   return {
+//     setLanguage: dispatch({type: "SET_LANGUAGE"})
+//   }
+// }
+// mapDispatchToProps 对象形式 这种形式在使用时直接调用即可，react-redux会自动调用dispatch 
+// eg: <div onClick={props.setLanguage} />
+// const mapDispatchToProps = {setLanguage}
+// export default connect(mapStateToProps, mapDispatchToProps)(Language)

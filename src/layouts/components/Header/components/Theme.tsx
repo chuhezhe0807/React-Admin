@@ -1,29 +1,31 @@
-import { Drawer, Divider, Switch } from "antd"
-import { useState } from "react"
-import { connect } from "react-redux"
-import { FireOutlined, SettingOutlined } from "@ant-design/icons"
-import { setThemeConfig } from "@/redux/modules/global/action"
-import { updateCollapse } from "@/redux/modules/menu/action"
 import SwitchDark from "@/components/SwitchDark"
+import * as AllTypes from "@/redux/mutation-types";
+import type {RootDispatch, RootState} from "@/redux/index";
 
-const Theme = (props: any) => {
-  const [visible, setVisible] = useState<boolean>(false)
-  const {
-    setThemeConfig,
-    updateCollapse,
-    menu: { isCollapse },
-    global: {
-      themeConfig,
-      themeConfig: { weakOrGray, breadcrumb, tabs, footer },
-    },
-  } = props
+import { useState } from "react"
+import { Drawer, Divider, Switch } from "antd"
+import { useSelector, useDispatch } from "react-redux";
+import { FireOutlined, SettingOutlined } from "@ant-design/icons"
+
+const Theme = () => {
+  const dispatch = useDispatch<RootDispatch>();
+  const [visible, setVisible] = useState<boolean>(false);
+  const {isCollapse} = useSelector((state: RootState) => state.menu);
+  const {themeConfig, themeConfig: {weakOrGray, breadcrumb, tabs, footer}} = useSelector((state: RootState) => state.global);
+
+  const onChange = (checked: boolean, keyName: string) => dispatch({type: AllTypes.SET_THEME_CONFIG, themeConfig: {...themeConfig, [keyName]: !checked}});
+  const setThemeConfigWeakOrGray = (weakOrGray: string) => dispatch({type: AllTypes.SET_THEME_CONFIG, themeConfig: {...themeConfig, weakOrGray}});
 
   const setWeakOrGray = (checked: boolean, theme: string) => {
-    if (checked) return setThemeConfig({ ...themeConfig, weakOrGray: theme })
-    setThemeConfig({ ...themeConfig, weakOrGray: "" })
+    if (checked) {
+      setThemeConfigWeakOrGray(theme);
+
+      return;
+    }
+
+    setThemeConfigWeakOrGray("");
   }
 
-  const onChange = (checked: boolean, keyName: string) => setThemeConfig({ ...themeConfig, [keyName]: !checked })
 
   return (
     <>
@@ -78,8 +80,8 @@ const Theme = (props: any) => {
           <span>折叠菜单</span>
           <Switch
             checked={isCollapse}
-            onChange={(e) => {
-              updateCollapse(e)
+            onChange={(isCollapse) => {
+              dispatch({type: AllTypes.UPDATE_COLLAPSE, isCollapse});
             }}
           />
         </div>
@@ -115,6 +117,4 @@ const Theme = (props: any) => {
   )
 }
 
-const mapStateToProps = (state: any) => state
-const mapDispatchToProps = { setThemeConfig, updateCollapse }
-export default connect(mapStateToProps, mapDispatchToProps)(Theme)
+export default Theme;

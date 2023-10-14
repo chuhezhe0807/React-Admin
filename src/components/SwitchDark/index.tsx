@@ -1,16 +1,18 @@
-import { connect } from "react-redux"
-import { Switch } from "antd"
-import { setThemeConfig } from "@/redux/modules/global/action"
+import * as AllTypes from "@/redux/mutation-types";
+import type {RootState, RootDispatch} from "@/redux/index";
 
-const SwitchDark = (props: any) => {
-  const { themeConfig, setThemeConfig } = props
+import { Switch } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+
+const SwitchDark = () => {
+  const dispatch = useDispatch<RootDispatch>();
+  const { themeConfig } = useSelector((state: RootState) => state.global);
+
   const onChange = (checked: boolean) => {
-    setThemeConfig({ ...themeConfig, isDark: checked })
+    dispatch({type: AllTypes.SET_THEME_CONFIG, themeConfig: {...themeConfig, isDark: checked}});
   }
 
   return <Switch className="dark" defaultChecked={themeConfig.isDark} checkedChildren={<>🌞</>} unCheckedChildren={<>🌜</>} onChange={onChange}></Switch>
 }
 
-const mapStateToProps = (state: any) => state.global
-const mapDispatchToProps = { setThemeConfig }
-export default connect(mapStateToProps, mapDispatchToProps)(SwitchDark)
+export default SwitchDark;
