@@ -1,22 +1,31 @@
-import React, { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
-import { Menu, Spin } from "antd"
-import { findAllBreadcrumb, getOpenKeys, handleRouter, searchRoute } from "@/utils/utils"
-import { setMenuList } from "@/redux/modules/menu/action"
-import { setBreadcrumbList } from "@/redux/modules/breadcrumb/action"
-import { setAuthRouter } from "@/redux/modules/auth/action"
-import { getMenuList } from "@/api/modules/login"
-import { connect } from "react-redux"
-import type { MenuProps } from "antd"
-import * as Icons from "@ant-design/icons"
 import Logo from "./components/Logo"
+import { findAllBreadcrumb, getOpenKeys, handleRouter, searchRoute } from "@/utils/utils"
+import { getMenuList } from "@/api/modules/login"
+import * as AllTypes from "@/redux/mutation-types";
+import type {RootDispatch, RootState} from "@/redux/index";
+
+import * as Icons from "@ant-design/icons"
+import { Menu, Spin } from "antd"
+import React, { useEffect, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { useLocation, useNavigate } from "react-router-dom"
+import type { MenuProps } from "antd"
+
 import "./index.less"
 
-const LayoutMenu = (props: any) => {
-  const { isCollapse, setBreadcrumbList, setAuthRouter, setMenuList: setMenuListAction } = props
+const LayoutMenu = () => {
   const { pathname } = useLocation()
   const [selectedKeys, setSelectedKeys] = useState<string[]>([pathname])
-  const [openKeys, setOpenKeys] = useState<string[]>([])
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const dispatch = useDispatch<RootDispatch>();
+  const { isCollapse, menuList: menuListFromStore } = useSelector((state: RootState) => state.menu);
+
+  const setBreadcrumbList = (breadcrumbList: { [propName: string]: any }) => 
+        dispatch({type: AllTypes.SET_BREADCRUMB_LIST, breadcrumbList});
+  const setAuthRouter = (authRouter: string[]) => 
+        dispatch({type: AllTypes.SET_AUTH_ROUTER, authRouter});
+  const setMenuListDispatch = (menuList: Menu.MenuOptions[]) => 
+        dispatch({type: AllTypes.SET_MENU_LIST, menuList});
 
   // 刷新页面菜单保持高亮
   useEffect(() => {
@@ -73,7 +82,7 @@ const LayoutMenu = (props: any) => {
       // 把路由菜单处理成一维数组，存储到redux中，做单路由权限判断
       const dynamicRouter = handleRouter(data)
       setAuthRouter(dynamicRouter)
-      setMenuListAction(data)
+      setMenuListDispatch(data)
     } catch (error) {
       console.error(error)
     } finally {
@@ -88,7 +97,7 @@ const LayoutMenu = (props: any) => {
   // 点击当前菜单跳转页面
   const navigate = useNavigate()
   const clickMenu: MenuProps["onClick"] = ({ key }: { key: string }) => {
-    const route = searchRoute(key, props.menuList)
+    const route = searchRoute(key, menuListFromStore)
     if (route.isLink) window.open(route.isLink, "_blank")
     navigate(key)
   }
@@ -112,6 +121,4 @@ const LayoutMenu = (props: any) => {
   )
 }
 
-const mapStateToProps = (state: any) => state.menu
-const mapDispatchToProps = { setBreadcrumbList, setMenuList, setAuthRouter }
-export default connect(mapStateToProps, mapDispatchToProps)(LayoutMenu)
+export default LayoutMenu;

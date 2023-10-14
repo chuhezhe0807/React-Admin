@@ -1,23 +1,28 @@
+import { Login } from "@/api/interface"
+import { HOME_URL } from "@/config/config"
+import { loginApi } from "@/api/modules/login"
+import * as AllTypes from "@/redux/mutation-types";
+import type {RootDispatch} from "@/redux/index";
+
 import md5 from "js-md5"
 import { useState } from "react"
 import { Button, Form, Input, message } from "antd"
 import { useNavigate } from "react-router-dom"
-import { Login } from "@/api/interface"
-import { HOME_URL } from "@/config/config"
-import { loginApi } from "@/api/modules/login"
-import { connect } from "react-redux"
-import { setToken } from "@/redux/modules/global/action"
+import { useDispatch } from "react-redux"
 import { useTranslation } from "react-i18next"
-import { setTabsList } from "@/redux/modules/tabs/action"
 import { UserOutlined, LockOutlined, CloseCircleOutlined } from "@ant-design/icons"
 
-const LoginForm = (props: any) => {
-  const [loading, setLoading] = useState<boolean>(false)
-  const navigate = useNavigate()
-  const { setToken, setTabsList } = props
+const LoginForm = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const dispatch = useDispatch<RootDispatch>();
+  const [loading, setLoading] = useState<boolean>(false);
+
   // 类似于 ref 可以获得Form这个组件的一个组件实例对象
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
+
+  const setToken = (token: string) => dispatch({type: AllTypes.SET_TOKEN, token});
+  const setTabsList = (tabsList: Menu.MenuOptions[]) => dispatch({type: AllTypes.SET_TABS_LIST, tabsList});
 
   const onFinish = async (loginForm: Login.ReqLoginForm) => {
     try {
@@ -72,5 +77,4 @@ const LoginForm = (props: any) => {
   )
 }
 
-const mapDispatchToProps = { setToken, setTabsList }
-export default connect(null, mapDispatchToProps)(LoginForm)
+export default LoginForm;

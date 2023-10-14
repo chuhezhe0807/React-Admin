@@ -1,7 +1,10 @@
-import { AnyAction } from "redux";
-import type { AuthState } from "@/redux/interface";
-import produce from "immer";
+
+
 import * as types from "@/redux/mutation-types";
+import type { TAuthStateAction } from "./action";
+import type { AuthState } from "@/redux/interface";
+
+import produce from "immer";
 
 const authState: AuthState = {
   authButtons: {},
@@ -9,7 +12,7 @@ const authState: AuthState = {
 };
 
 // auth reducer
-const auth = (state: AuthState = authState, action: AnyAction) =>
+const auth = (state: AuthState = authState, action: TAuthStateAction) =>
   produce(state, draftState => {
     switch (action.type) {
       case types.SET_AUTH_BUTTONS:

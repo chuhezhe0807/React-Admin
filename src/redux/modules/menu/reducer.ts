@@ -1,4 +1,4 @@
-import { AnyAction } from "redux";
+import { TMenuStateActions } from "./action";
 import * as AllTypes from '@/redux/mutation-types'
 import produce from "immer";
 import { MenuState } from "@/redux/interface";
@@ -8,7 +8,7 @@ const menuState: MenuState = {
   menuList: []
 }
 
-const menu = (state: MenuState = menuState, action: AnyAction) => (
+const menu = (state: MenuState = menuState, action: TMenuStateActions) => (
   produce(state, draftState => {
     switch (action.type) {
       case AllTypes.UPDATE_COLLAPSE:

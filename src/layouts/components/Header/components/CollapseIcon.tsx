@@ -1,9 +1,14 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
-import { connect } from "react-redux"
-import { updateCollapse } from "@/redux/modules/menu/action"
+import * as AllTypes from "@/redux/mutation-types";
+import type {RootDispatch, RootState} from "@/redux/index";
 
-const CollapseIcon = (props: any) => {
-  const { isCollapse, updateCollapse } = props
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
+import { useDispatch, useSelector } from "react-redux"
+
+const CollapseIcon = () => {
+  const dispatch = useDispatch<RootDispatch>();
+  const { isCollapse } = useSelector((state: RootState) => state.menu);
+  
+  const updateCollapse = (isCollapse: boolean) => dispatch({type: AllTypes.UPDATE_COLLAPSE, isCollapse});
 
   return (
     <div className="collapsed" onClick={() => updateCollapse(!isCollapse)}>
@@ -12,6 +17,4 @@ const CollapseIcon = (props: any) => {
   )
 }
 
-const mapStateToProps = (state: any) => state.menu
-const mapDispatchToProps = { updateCollapse }
-export default connect(mapStateToProps, mapDispatchToProps)(CollapseIcon)
+export default CollapseIcon;

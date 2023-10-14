@@ -1,18 +1,21 @@
-import { useRef } from "react"
-import { Avatar, Modal, Menu, Dropdown, message, MenuProps } from "antd"
-import { ExclamationCircleOutlined } from "@ant-design/icons"
-import { useNavigate } from "react-router-dom"
-import { HOME_URL } from "@/config/config"
-import { connect } from "react-redux"
-import { setToken } from "@/redux/modules/global/action"
 import PasswordModal from "./PasswordModal"
 import InfoModal from "./InfoModal"
 import avatar from "@/assets/images/avatar.png"
+import { ExclamationCircleOutlined } from "@ant-design/icons"
+import { HOME_URL } from "@/config/config"
+import * as AllTypes from "@/redux/mutation-types";
+import type {RootDispatch} from "@/redux/index";
 
-const AvatarIcon = (props: any) => {
-  const { setToken } = props
-  const navigate = useNavigate()
+import { useRef } from "react"
+import { Avatar, Modal, Dropdown, message, MenuProps } from "antd"
+import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
 
+const AvatarIcon = () => {
+  const dispatch = useDispatch<RootDispatch>();
+  const navigate = useNavigate();
+  
+  const setToken = (token: string) => dispatch({type: AllTypes.SET_TOKEN, token});
   interface ModalProps {
     showModal: (prams: { name: number }) => void
   }
@@ -73,5 +76,4 @@ const AvatarIcon = (props: any) => {
   )
 }
 
-const mapDispatchToProps = { setToken }
-export default connect(null, mapDispatchToProps)(AvatarIcon)
+export default AvatarIcon;

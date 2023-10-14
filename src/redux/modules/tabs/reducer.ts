@@ -1,8 +1,9 @@
 import { HOME_URL } from "@/config/config";
 import { TabsState } from "@/redux/interface";
-import produce from "immer";
-import { AnyAction } from "redux";
+import { TTabsListActions } from "./action";
 import * as AllTypes from '@/redux/mutation-types'
+
+import produce from "immer";
 
 
 const tabsState: TabsState = {
@@ -11,7 +12,7 @@ const tabsState: TabsState = {
 }
 
 // tabs reducer
-const tabs = (state: TabsState = tabsState, action: AnyAction) => (
+const tabs = (state: TabsState = tabsState, action: TTabsListActions) => (
   produce(state, (draftState) => {
     switch(action.type) {
       case AllTypes.SET_TABS_LIST:
