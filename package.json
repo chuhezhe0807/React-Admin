@@ -32,7 +32,8 @@
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
     "screenfull": "^6.0.2",
-    "dayjs": "1.11.10"
+    "dayjs": "1.11.10",
+    "zrender": "5.4.3"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
