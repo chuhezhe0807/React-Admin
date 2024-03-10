@@ -26,3 +26,6 @@ dist-ssr
 # others
 algorithm.js
 A-star.html
+
+# /test
+test/*

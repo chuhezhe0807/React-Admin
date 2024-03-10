@@ -17,6 +17,23 @@ export const menuList: Menu.MenuOptions[] = [
         path: "/canvasDemo/index"
     },
     {
+        icon: "OrderedListOutlined",
+        title: "一些案例",
+        path: "/demos",
+        children: [
+            {
+                icon: "OrderedListOutlined",
+                title: "undo redo",
+                path: "/demos/undo",
+            },
+            {
+                icon: "OrderedListOutlined",
+                title: "empty",
+                path: "/demos/empty",
+            }
+        ]
+    },
+    {
         icon: "TableOutlined",
         title: "超级表格",
         path: "/proTable",
